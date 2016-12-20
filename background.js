@@ -1,6 +1,29 @@
 console.log('block fishing website extension run background.');
 
-chrome.tabs.onCreated.addListener((tab) => {
+// AJAX get block list.
+function getResponse(url) {
+  return new Promise((resolve, reject) => {
+    const httpRequest = new XMLHttpRequest();
+
+    httpRequest.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        resolve(this.responseText);
+      } else {
+        reject('error!');
+      }
+    }
+
+    httpRequest.open('GET', '/block-list.json')
+    httpRequest.send()
+  });
+}
+
+// test.
+getResponse('/block-list.json').then((blockList) => {
+  console.log(blockList);
+});
+
+function stop(tab) {
   console.log(`block ${tab.url}!`);
 
   const originUrl = tab.url;
@@ -10,16 +33,16 @@ chrome.tabs.onCreated.addListener((tab) => {
       url: '/stop.html',
     });
   }
+}
+
+// When new tab open.
+chrome.tabs.onCreated.addListener((tab) => {
+  stop(tab);
 });
 
+// When load new url.
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  console.log(`redirect from ${tab.url} to facebook!`);
-
-  if (tab.url === 'https://www.facebook.com/') {
-    chrome.tabs.update(tabId, {
-      url: '/stop.html',
-    });
-  }
+  stop(tab);
 });
 
 function getCurrentTabUrl(callback) {
