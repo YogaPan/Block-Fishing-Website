@@ -5,10 +5,8 @@ console.log('block fishing website extension run background.');
 // TODO
 function inBlockList(blocklist, url) {
   for (let i = 0; i < blocklist.length; i++) {
-    console.log(url);
-    console.log(blocklist[i]);
-
-    if (url === blocklist[i]) {
+    const pattern = new RegExp(blocklist[i]);
+    if (pattern.test(url)) {
       return true;
     }
   }
