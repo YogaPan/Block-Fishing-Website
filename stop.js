@@ -1,0 +1,23 @@
+function getParameterByName(name, url) {
+  if (!url) {
+    url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, "\\$&");
+  const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+  results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+document.getElementById('back').addEventListener('click', () => {
+  window.history.go(-2);
+});
+
+document.getElementById('continue').addEventListener('click', () => {
+  console.log(getParameterByName('to'));
+});
+
+document.getElementById('continueNoAds').addEventListener('click', () => {
+  console.log(getParameterByName('to'));
+});

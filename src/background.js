@@ -1,8 +1,7 @@
 const blocklist = require('../blocklist.json');
 
-console.log('block fishing website extension run background.');
+console.log('block fishing website extension run in background.');
 
-// TODO
 function inBlockList(blocklist, url) {
   for (let i = 0; i < blocklist.length; i++) {
     const pattern = new RegExp(blocklist[i]);
@@ -18,13 +17,12 @@ function block(tab) {
   console.log(`block ${tab.url}!`);
 
   chrome.tabs.update(tab.id, {
-    url: '/stop.html',
+    url: '/stop.html?to=' + encodeURIComponent(tab.url),
   });
 }
 
 function foo(tab) {
   if (inBlockList(blocklist, tab.url)) {
-  console.log('foo');
     block(tab);
   }
 }
