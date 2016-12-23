@@ -41,6 +41,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   foo(tab);
 });
 
+// When close tab.
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
   const index = permitted.indexOf(tabId);
 
@@ -60,14 +61,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function getCurrentTabUrl(callback) {
-  var queryInfo = {
+  const queryInfo = {
     active: true,
     currentWindow: true
   };
 
   chrome.tabs.query(queryInfo, function(tabs) {
-    var tab = tabs[0];
-    var url = tab.url;
+    const tab = tabs[0];
+    const url = tab.url;
 
     console.assert(typeof url == 'string', 'tab.url should be a string');
 
