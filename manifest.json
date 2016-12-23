@@ -23,7 +23,6 @@
 
   "permissions": [
     "tabs",
-    "activeTab",
-    "webNavigation"
+    "activeTab"
   ]
 }

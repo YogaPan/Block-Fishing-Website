@@ -1,8 +1,6 @@
 const blocklist = require('../blocklist.json');
 
-console.log('block fishing website extension run in background.');
-
-function inBlockList(blocklist, url) {
+function inBlockList(url) {
   for (let i = 0; i < blocklist.length; i++) {
     const pattern = new RegExp(blocklist[i]);
     if (pattern.test(url)) {
@@ -11,6 +9,13 @@ function inBlockList(blocklist, url) {
   }
 
   return false;
+}
+
+function isPermitted(tab) {
+  if (permitted.indexOf(tab.id) !== -1)
+    return true;
+  else
+    return false;
 }
 
 function block(tab) {
@@ -22,8 +27,9 @@ function block(tab) {
 }
 
 function foo(tab) {
-  if (inBlockList(blocklist, tab.url)) {
-    block(tab);
+  if (inBlockList(tab.url)) {
+    if (isPermitted(tab) === false)
+      block(tab);
   }
 }
 
@@ -35,6 +41,18 @@ chrome.tabs.onCreated.addListener((tab) => {
 // When load new url.
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   foo(tab);
+});
+
+// Save permitted tabs id.
+const permitted = [];
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (permitted.indexOf(sender.tab.id) === -1)
+    permitted.push(sender.tab.id);
+
+  console.log(permitted);
+
+  sendResponse({ message: "ok" });
 });
 
 function getCurrentTabUrl(callback) {

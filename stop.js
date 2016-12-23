@@ -15,9 +15,30 @@ document.getElementById('back').addEventListener('click', () => {
 });
 
 document.getElementById('continue').addEventListener('click', () => {
-  console.log(getParameterByName('to'));
+  getCurrentTabId((id) => {
+    chrome.runtime.sendMessage({}, (response) => {
+      if (response.message = 'ok')
+        window.location.href = getParameterByName('to');
+    });
+  });
 });
 
 document.getElementById('continueNoAds').addEventListener('click', () => {
-  console.log(getParameterByName('to'));
+  window.location.href = getParameterByName('to');
 });
+
+function getCurrentTabId(callback) {
+  var queryInfo = {
+    active: true,
+    currentWindow: true
+  };
+
+  chrome.tabs.query(queryInfo, function(tabs) {
+    var tab = tabs[0];
+    var id = tab.id;
+
+    console.assert(typeof id == 'number', 'tab.url should be a number');
+
+    callback(id);
+  });
+}
