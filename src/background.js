@@ -1,6 +1,6 @@
 const blocklist = require('../blocklist.json');
 
-function inBlockList(url) {
+function isBlocked(url) {
   for (let i = 0; i < blocklist.length; i++) {
     const pattern = new RegExp(blocklist[i]);
     if (pattern.test(url)) {
@@ -19,15 +19,13 @@ function isPermitted(tab) {
 }
 
 function block(tab) {
-  console.log(`block ${tab.url}!`);
-
   chrome.tabs.update(tab.id, {
     url: '/stop.html?to=' + encodeURIComponent(tab.url),
   });
 }
 
 function foo(tab) {
-  if (inBlockList(tab.url)) {
+  if (isBlocked(tab.url)) {
     if (isPermitted(tab) === false)
       block(tab);
   }
@@ -43,14 +41,20 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   foo(tab);
 });
 
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  const index = permitted.indexOf(tabId);
+
+  if (index !== -1) {
+    permitted.splice(index, 1);
+  }
+});
+
 // Save permitted tabs id.
 const permitted = [];
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (permitted.indexOf(sender.tab.id) === -1)
     permitted.push(sender.tab.id);
-
-  console.log(permitted);
 
   sendResponse({ message: "ok" });
 });
