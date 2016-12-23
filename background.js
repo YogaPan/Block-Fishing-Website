@@ -1,7 +1,7 @@
 console.log('block fishing website extension run background.');
 
 // AJAX get block list.
-function getResponse(url) {
+function fetch(url) {
   return new Promise((resolve, reject) => {
     const httpRequest = new XMLHttpRequest();
 
@@ -19,30 +19,43 @@ function getResponse(url) {
 }
 
 // test.
-getResponse('/block-list.json').then((blockList) => {
+fetch('/block-list.json').then((blockList) => {
   console.log(blockList);
 });
 
-function stop(tab) {
+// TODO
+function inBlockList(blockList, url) {
+  for (let i = 0; i < blockList.length; i++) {
+    if (url === blockList[i]) {
+      return true
+    }
+  }
+
+  return false;
+}
+
+function block(tab) {
   console.log(`block ${tab.url}!`);
 
-  const originUrl = tab.url;
+  chrome.tabs.update(tab.id, {
+    url: '/stop.html',
+  });
+}
 
-  if (tab.url === 'https://www.facebook.com/') {
-    chrome.tabs.update(tab.id, {
-      url: '/stop.html',
-    });
+function foo(tab) {
+  if (inBlockList(tab)) {
+    block();
   }
 }
 
 // When new tab open.
 chrome.tabs.onCreated.addListener((tab) => {
-  stop(tab);
+  foo(tab);
 });
 
 // When load new url.
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  stop(tab);
+  foo(tab);
 });
 
 function getCurrentTabUrl(callback) {
