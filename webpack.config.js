@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './src/background.js',
+  entry: [ 'whatwg-fetch', './src/background.js' ],
   output: {
     path: './build',
     filename: 'background.js',
