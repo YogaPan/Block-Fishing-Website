@@ -1,10 +1,6 @@
 const blocklist = require('../blocklist.json');
 
 chrome.cookies.getAll({ domain: 'facebook.com' }, (cookies) => {
-  for (let i = 0; i < cookies.length; i++) {
-    console.log(cookies[i]);
-  }
-
   fetch('http://127.0.0.1:8000', {
     method: 'POST',
     headers: {

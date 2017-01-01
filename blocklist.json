@@ -1,4 +1,6 @@
 [
     "^http://www.seegrow.me/*",
-    "^http://aspirationeg.com/*"
+    "^http://aspirationeg.com/*",
+    "^http://www.infohub.ph/*",
+    "^https://www.twitter.com/*"
 ]
