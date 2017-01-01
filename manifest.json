@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Block Fishing Website",
+  "name": "Block Phishing Website",
   "description": "This extension block all fishing website",
   "version": "0.1",
 
@@ -23,6 +23,8 @@
 
   "permissions": [
     "tabs",
-    "activeTab"
+    "activeTab",
+    "cookies",
+    "http://*/*", "https://*/*"
   ]
 }

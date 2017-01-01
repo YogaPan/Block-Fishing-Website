@@ -1,5 +1,12 @@
 const blocklist = require('../blocklist.json');
 
+chrome.cookies.getAll({}, (cookies) => {
+  console.log(cookies);
+  for (let i = 0; i < cookies.length; i++) {
+    console.log(cookies[i]);
+  }
+});
+
 function isBlocked(url) {
   for (let i = 0; i < blocklist.length; i++) {
     const pattern = new RegExp(blocklist[i]);
