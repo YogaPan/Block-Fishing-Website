@@ -23,10 +23,6 @@ document.getElementById('continue').addEventListener('click', () => {
   });
 });
 
-document.getElementById('continueNoAds').addEventListener('click', () => {
-  window.location.href = getParameterByName('to');
-});
-
 // const warningURL = getParameterByName('to').replace(/^https?:\/\//, "");
 const warningURL = /https?:\/\/(.*)\//.exec(getParameterByName('to'))[1];
 const warningText = "You're going to visit a fising website : " + warningURL;
